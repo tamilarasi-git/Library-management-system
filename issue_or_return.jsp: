@@ -1,0 +1,77 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+     <%@ page import="java.sql.*" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<style>
+table
+{
+	background-color:bisque;
+	font-family: 'comic sans ms';
+}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>library database (lib_fr)</title>
+<script>
+function goBack()
+  {
+  window.history.back()
+  }
+</script>
+</head>
+<body background="F:\java_project_tools\project\pic_2.jpg"></body>
+<body>
+<%
+System.out.println("MySQL Connect Example.");
+Connection connec = null;
+String username="";
+String password="";
+username = request.getParameter("username");
+password = request.getParameter("password");
+//System.out.println(username+password);
+String url = "jdbc:mysql://localhost:3306/";
+String dbName = "lib";
+String driver = "com.mysql.jdbc.Driver";
+String userName = "root";
+String pass = "tamil";
+String query = "select count(*) from login where username = ? and password = ? ";
+int icount=0;
+        Class.forName(driver).newInstance();
+        connec = DriverManager.getConnection(url + dbName, userName, pass);
+        System.out.println("Connected to the database");
+        PreparedStatement stmt=connec.prepareStatement(query);
+        stmt.setString(1,username);
+        stmt.setString(2,password);
+        ResultSet rs = stmt.executeQuery();
+		while(rs.next())
+		{
+			icount = rs.getInt(1);
+        	System.out.println(icount);
+		}
+ %>
+ <%
+ if(icount==1)
+ {
+ %>
+ <br><br><br><br>
+ <center>
+<h2><i><font style="comic sans ms" color="white"><b> ISSUE or RETURN? </b></font></i></h2>
+</center>
+<pre>	
+						<a href="search_link.jsp"><i><b><font color="white"style="comic sans ms" size="4"> ISSUE </font></b></i></a>					<a href="return.jsp"><i><b><font style="comic sans ms" color="white"size="4"> RETURN </font></b></i></a>
+				<br>									<input type="button" value="Back" onclick="goBack()">
+				<br>
+								<a href="lib_2.jsp"><i><b><font style="comic sans ms" color="white"size="4"> Go to main page </font></b></i></a>
+</pre> 
+ <% }
+ %>
+ <%if(icount!=1)
+ {
+ %>
+ <h3>
+ <i>
+ Login Unsuccessful</i></h3>
+ <% }%>
+ </body>
+</html>
